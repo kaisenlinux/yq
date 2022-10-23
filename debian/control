@@ -1,0 +1,21 @@
+Source: yq
+Section: admin
+Priority: optional
+Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
+Build-Depends:
+ debhelper-compat (= 13),
+ golang-go (>= 1.19),
+ dh-golang,
+ pandoc,
+Standards-Version: 4.6.1
+Homepage: https://github.com/mikefarah/yq
+Vcs-Browser: https://gitlab.com/kaisenlinux/packages/yq
+Vcs-Git: https://gitlab.com/kaisenlinux/packages/yq.git
+
+Package: yq
+Architecture: amd64 arm64 i386
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ golang-go (>= 1.19),
+Description: Portable command-line YAML, JSON, XML, CSV and properties processor
