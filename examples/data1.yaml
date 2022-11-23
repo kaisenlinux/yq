@@ -1,12 +1,1 @@
-# --------------------------------------------------
-# It's a test with comment
-# --------------------------------------------------
-test:
-  - name: a
-  - name: b
-  - name: c
-groups:
-  - name: a
-  - name: b
-  - name: c
-  - name: c
+["foobar", "foobaz", "blarp"]

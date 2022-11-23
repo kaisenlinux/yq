@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+# examples where header-preprocess is required
+
 setUp() {
   rm test*.yml || true
   cat >test.yml <<EOL
@@ -30,6 +33,24 @@ EOM
   X=$(./yq e '(select(di == 0) | .a) = "thing"' - < test.yml)
   assertEquals "$expected" "$X"
 }
+
+testLeadingSeperatorWithDirective() {
+  cat >test.yml <<EOL
+%YAML 1.1
+---
+this: should really work
+EOL
+
+  read -r -d '' expected << EOM
+%YAML 1.1
+---
+this: should really work
+EOM
+
+  X=$(./yq < test.yml)
+  assertEquals "$expected" "$X"
+}
+
 
 testLeadingSeperatorPipeIntoEvalSeq() {
   X=$(./yq e - < test.yml)
