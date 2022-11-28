@@ -1,11 +1,17 @@
+yq (4.30.5-1kaisen) kaisen-packages; urgency=medium
+
+  * Import the 4.30.5 release
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Mon, 28 Nov 2022 21:20:51 +0100
+
 yq (4.30.4-1kaisen) kaisen-packages; urgency=medium
 
   * Import the 4.30.4 release
 
- -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 23 Nov 2022 23:04:41 +0200
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 23 Nov 2022 23:04:41 +0100
 
 yq (4.27.5-1kaisen) kaisen-packages; urgency=medium
 
   * Initial release
 
- -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Fri, 30 Sep 2022 13:25:03 +0200
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Fri, 30 Sep 2022 13:25:03 +0100
