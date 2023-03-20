@@ -16,9 +16,6 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	go build
-	mkdir -p $(CURDIR)/_build/bash-completion $(CURDIR)/_build/zsh-completion
-	$(CURDIR)/yq shell-completion bash > $(CURDIR)/_build/bash-completion/yq
-	$(CURDIR)/yq shell-completion zsh > $(CURDIR)/_build/zsh-completion/_yq
 	$(CURDIR)/scripts/generate-man-page-md.sh
 	$(CURDIR)/scripts/generate-man-page.sh
 
@@ -29,5 +26,5 @@ override_dh_dwz:
 
 override_dh_auto_install:
 	install -p -m 0755 $(CURDIR)/yq $(CURDIR)/debian/yq/usr/bin/
-	install -p -m 0644 $(CURDIR)/_build/bash-completion/yq $(CURDIR)/debian/yq/usr/share/bash-completion/completions/
-	install -p -m 0644 $(CURDIR)/_build/zsh-completion/_yq $(CURDIR)/debian/yq/usr/share/zsh/vendor-completions/
+	$(CURDIR)/yq shell-completion bash > $(CURDIR)/debian/yq/usr/share/bash-completion/completions/yq
+	$(CURDIR)/yq shell-completion zsh > $(CURDIR)/debian/yq/usr/share/zsh/vendor-completions/_yq
