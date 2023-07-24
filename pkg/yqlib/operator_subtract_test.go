@@ -8,7 +8,7 @@ var subtractOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
 		document:   `{}`,
-		expression: "(.a - .b) as $x",
+		expression: "(.a - .b) as $x | .",
 		expected: []string{
 			"D0, P[], (doc)::{}\n",
 		},
@@ -56,15 +56,6 @@ var subtractOperatorScenarios = []expressionScenario{
 		expression: `. - [{"c": "d", "a": [1]}]`,
 		expected: []string{
 			"D0, P[], (!!seq)::[{a: [2], c: d}, {a: b}]\n",
-		},
-	},
-	{
-		description:    "Number subtraction - float",
-		subdescription: "If the lhs or rhs are floats then the expression will be calculated with floats.",
-		document:       `{a: 3, b: 4.5}`,
-		expression:     `.a = .a - .b`,
-		expected: []string{
-			"D0, P[], (doc)::{a: -1.5, b: 4.5}\n",
 		},
 	},
 	{

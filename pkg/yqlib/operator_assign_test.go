@@ -4,6 +4,11 @@ import (
 	"testing"
 )
 
+var mergeAnchorAssign = `a: &a
+  x: OriginalValue
+b:
+  <<: *a`
+
 var assignOperatorScenarios = []expressionScenario{
 	{
 		description: "Create yaml file",
@@ -18,6 +23,14 @@ var assignOperatorScenarios = []expressionScenario{
 		expression: `.a |= .b`,
 		expected: []string{
 			"D0, P[], (doc)::a: null\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   mergeAnchorAssign,
+		expression: `.c = .b | .a.x = "ModifiedValue" | explode(.)`,
+		expected: []string{
+			"D0, P[], (doc)::a:\n    x: ModifiedValue\nb:\n    x: ModifiedValue\nc:\n    x: ModifiedValue\n",
 		},
 	},
 	{
@@ -183,7 +196,7 @@ var assignOperatorScenarios = []expressionScenario{
 	},
 	{
 		description:           "Update node value that has an anchor",
-		subdescription:        "Anchor will remaple",
+		subdescription:        "Anchor will remain",
 		dontFormatInputForDoc: true,
 		document:              `a: &cool cat`,
 		expression:            `.a = "dog"`,
@@ -217,7 +230,7 @@ var assignOperatorScenarios = []expressionScenario{
 		},
 	},
 	{
-		description:    "Custom types: clovver",
+		description:    "Custom types: clobber",
 		subdescription: "Use the `c` option to clobber custom tags",
 		document:       "a: !cat meow\nb: !dog woof",
 		expression:     `.a =c .b`,

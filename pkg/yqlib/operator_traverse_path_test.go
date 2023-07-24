@@ -36,6 +36,13 @@ steps:
 
 var traversePathOperatorScenarios = []expressionScenario{
 	{
+		skipDoc:     true,
+		description: "splat empty map",
+		document:    "{}",
+		expression:  ".[]",
+		expected:    []string{},
+	},
+	{
 		skipDoc:    true,
 		document:   `[[1]]`,
 		expression: `.[0][0]`,
@@ -116,7 +123,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 	},
 	{
 		description:    "Special characters",
-		subdescription: "Use quotes with brackets around path elements with special characters",
+		subdescription: "Use quotes with square brackets around path elements with special characters",
 		document:       `{"{}": frog}`,
 		expression:     `.["{}"]`,
 		expected: []string{
@@ -133,7 +140,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 	},
 	{
 		description:    "Keys with spaces",
-		subdescription: "Use quotes with brackets around path elements with special characters",
+		subdescription: "Use quotes with square brackets around path elements with special characters",
 		document:       `{"red rabbit": frog}`,
 		expression:     `.["red rabbit"]`,
 		expected: []string{
@@ -151,7 +158,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
 		document:   `c: dog`,
-		expression: `.[.a.b] as $x`,
+		expression: `.[.a.b] as $x | .`,
 		expected: []string{
 			"D0, P[], (doc)::c: dog\n",
 		},

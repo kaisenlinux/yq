@@ -1,3 +1,5 @@
+//go:build !yq_nojson
+
 package yqlib
 
 import (
@@ -78,6 +80,13 @@ const roundTripMultiLineJson = `{
 `
 
 var jsonScenarios = []formatScenario{
+	{
+		description:  "array null",
+		skipDoc:      true,
+		input:        "[null]",
+		scenarioType: "roundtrip-ndjson",
+		expected:     "[null]\n",
+	},
 	{
 		description:  "set tags",
 		skipDoc:      true,

@@ -16,6 +16,8 @@ These operators are useful to process yaml documents that have stringified embed
 | TSV | from_tsv/@tsvd | to_tsv/@tsv |
 | XML | from_xml/@xmld | to_xml(i)/@xml |
 | Base64 | @base64d | @base64 |
+| URI | @urid | @uri |
+| Shell |  | @sh |
 
 
 See CSV and TSV [documentation](https://mikefarah.gitbook.io/yq/usage/csv-tsv) for accepted formats.
@@ -23,7 +25,7 @@ See CSV and TSV [documentation](https://mikefarah.gitbook.io/yq/usage/csv-tsv) f
 XML uses the `--xml-attribute-prefix` and `xml-content-name` flags to identify attributes and content fields.
 
 
-Base64 assumes [rfc4648](https://rfc-editor.org/rfc/rfc4648.html) encoding. Encoding and decoding both assume that the content is a string.
+Base64 assumes [rfc4648](https://rfc-editor.org/rfc/rfc4648.html) encoding. Encoding and decoding both assume that the content is a utf-8 string and not binary content.
 
 ## Encode value as json string
 Given a sample.yml file of:
@@ -307,7 +309,7 @@ cat,"thing1,thing2",true,3.40
 dog,thing3,false,12
 ```
 
-## Encode array of array scalars as tsv string
+## Encode array of arrays as tsv string
 Scalars are strings, numbers and booleans.
 
 Given a sample.yml file of:
@@ -433,6 +435,50 @@ yq '@yaml | @base64' sample.yml
 will output
 ```yaml
 YTogYXBwbGUK
+```
+
+## Encode a string to uri
+Given a sample.yml file of:
+```yaml
+coolData: this has & special () characters *
+```
+then
+```bash
+yq '.coolData | @uri' sample.yml
+```
+will output
+```yaml
+this+has+%26+special+%28%29+characters+%2A
+```
+
+## Decode a URI to a string
+Given a sample.yml file of:
+```yaml
+this+has+%26+special+%28%29+characters+%2A
+```
+then
+```bash
+yq '@urid' sample.yml
+```
+will output
+```yaml
+this has & special () characters *
+```
+
+## Encode a string to sh
+Sh/Bash friendly string
+
+Given a sample.yml file of:
+```yaml
+coolData: strings with spaces and a 'quote'
+```
+then
+```bash
+yq '.coolData | @sh' sample.yml
+```
+will output
+```yaml
+strings' with spaces and a '\'quote\'
 ```
 
 ## Decode a base64 encoded string

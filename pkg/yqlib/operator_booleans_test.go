@@ -13,6 +13,16 @@ var booleanOperatorScenarios = []expressionScenario{
 		},
 	},
 	{
+		description:    "\"yes\" and \"no\" are strings",
+		subdescription: "In the yaml 1.2 standard, support for yes/no as booleans was dropped - they are now considered strings. See '10.2.1.2. Boolean' in https://yaml.org/spec/1.2.2/",
+		document:       `[yes, no]`,
+		expression:     `.[] | tag`,
+		expected: []string{
+			"D0, P[0], (!!str)::!!str\n",
+			"D0, P[1], (!!str)::!!str\n",
+		},
+	},
+	{
 		skipDoc:    true,
 		document:   "b: hi",
 		expression: `.a or .c`,
@@ -102,7 +112,7 @@ var booleanOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
 		document:   `[{pet: cat}]`,
-		expression: `any_c(.name == "harry") as $c`,
+		expression: `any_c(.name == "harry") as $c | .`,
 		expected: []string{
 			"D0, P[], (doc)::[{pet: cat}]\n",
 		},
@@ -110,9 +120,17 @@ var booleanOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
 		document:   `[{pet: cat}]`,
-		expression: `all_c(.name == "harry") as $c`,
+		expression: `any_c(.name == "harry") as $c | $c`,
 		expected: []string{
-			"D0, P[], (doc)::[{pet: cat}]\n",
+			"D0, P[], (!!bool)::false\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   `[{pet: cat}]`,
+		expression: `all_c(.name == "harry") as $c | $c`,
+		expected: []string{
+			"D0, P[], (!!bool)::false\n",
 		},
 	},
 	{
@@ -185,7 +203,7 @@ var booleanOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
 		document:   `{}`,
-		expression: `(.a.b or .c) as $x`,
+		expression: `(.a.b or .c) as $x | .`,
 		expected: []string{
 			"D0, P[], (doc)::{}\n",
 		},
@@ -193,7 +211,7 @@ var booleanOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
 		document:   `{}`,
-		expression: `(.a.b and .c) as $x`,
+		expression: `(.a.b and .c) as $x | .`,
 		expected: []string{
 			"D0, P[], (doc)::{}\n",
 		},
