@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
 Build-Depends:
  debhelper-compat (= 13),
- golang-go (>= 1.19),
+ golang-go (>= 1.20),
  dh-golang,
  pandoc,
 Standards-Version: 4.6.1
@@ -17,5 +17,4 @@ Architecture: amd64 arm64 i386
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- golang-go (>= 1.19),
 Description: Portable command-line YAML, JSON, XML, CSV and properties processor

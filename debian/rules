@@ -5,12 +5,10 @@ export GOBIN=${GOPATH}/bin
 export GO111MODULE=on
 
 %:
-	dh $@ --buildsystem=golang
+	dh $@ --buildsystem=golang --builddirectory=_build
 
 override_dh_auto_clean:
-	rm -rf $(CURDIR)/_build
-	rm -f $(CURDIR)/yq.1
-	rm -f $(CURDIR)/yq
+	rm -rf $(CURDIR)/_build $(CURDIR)/yq.1 $(CURDIR)/yq
 
 override_dh_auto_configure:
 

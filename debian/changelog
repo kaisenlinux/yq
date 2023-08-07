@@ -1,3 +1,9 @@
+yq (4.34.2-2kaisen) kaisen-packages; urgency=medium
+
+  * Remove golang-go as package dependancy
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Mon, 07 Aug 2023 23:17:44 +0100
+
 yq (4.34.2-1kaisen) kaisen-packages; urgency=medium
 
   * Import the 4.34.2 release
