@@ -38,7 +38,6 @@ func (ye *yamlEncoder) PrintDocumentSeparator(writer io.Writer) error {
 }
 
 func (ye *yamlEncoder) PrintLeadingContent(writer io.Writer, content string) error {
-	// log.Debug("headcommentwas [%v]", content)
 	reader := bufio.NewReader(strings.NewReader(content))
 
 	for {
@@ -47,7 +46,7 @@ func (ye *yamlEncoder) PrintLeadingContent(writer io.Writer, content string) err
 		if errReading != nil && !errors.Is(errReading, io.EOF) {
 			return errReading
 		}
-		if strings.Contains(readline, "$yqDocSeperator$") {
+		if strings.Contains(readline, "$yqDocSeparator$") {
 
 			if err := ye.PrintDocumentSeparator(writer); err != nil {
 				return err

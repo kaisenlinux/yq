@@ -33,6 +33,7 @@ const (
 	ShOutputFormat
 	TomlOutputFormat
 	ShellVariablesOutputFormat
+	LuaOutputFormat
 )
 
 func OutputFormatFromString(format string) (PrinterOutputFormat, error) {
@@ -53,8 +54,10 @@ func OutputFormatFromString(format string) (PrinterOutputFormat, error) {
 		return TomlOutputFormat, nil
 	case "shell", "s", "sh":
 		return ShellVariablesOutputFormat, nil
+	case "lua", "l":
+		return LuaOutputFormat, nil
 	default:
-		return 0, fmt.Errorf("unknown format '%v' please use [yaml|json|props|csv|tsv|xml|toml|shell]", format)
+		return 0, fmt.Errorf("unknown format '%v' please use [yaml|json|props|csv|tsv|xml|toml|shell|lua]", format)
 	}
 }
 
@@ -145,7 +148,7 @@ func (p *resultsPrinter) PrintResults(matchingNodes *list.List) error {
 			return errorWriting
 		}
 
-		commentsStartWithSepExp := regexp.MustCompile(`^\$yqDocSeperator\$`)
+		commentsStartWithSepExp := regexp.MustCompile(`^\$yqDocSeparator\$`)
 		commentStartsWithSeparator := commentsStartWithSepExp.MatchString(mappedDoc.LeadingContent)
 
 		if (p.previousDocIndex != mappedDoc.Document || p.previousFileIndex != mappedDoc.FileIndex) && !commentStartsWithSeparator {

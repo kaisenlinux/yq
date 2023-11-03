@@ -26,8 +26,8 @@ var participleYqRules = []*participleYqRule{
 	{"RecursiveDecent", `\.\.`, recursiveDecentOpToken(false), 0},
 
 	{"GetVariable", `\$[a-zA-Z_\-0-9]+`, getVariableOpToken(), 0},
-	{"AsignAsVariable", `as`, opTokenWithPrefs(assignVariableOpType, nil, assignVarPreferences{}), 0},
-	{"AsignRefVariable", `ref`, opTokenWithPrefs(assignVariableOpType, nil, assignVarPreferences{IsReference: true}), 0},
+	{"AssignAsVariable", `as`, opTokenWithPrefs(assignVariableOpType, nil, assignVarPreferences{}), 0},
+	{"AssignRefVariable", `ref`, opTokenWithPrefs(assignVariableOpType, nil, assignVarPreferences{IsReference: true}), 0},
 
 	{"CreateMap", `:\s*`, opToken(createMapOpType), 0},
 	simpleOp("length", lengthOpType),
@@ -201,7 +201,7 @@ var participleYqRules = []*participleYqRule{
 	{`whitespace`, `[ \t\n]+`, nil, 0},
 
 	{"WrappedPathElement", `\."[^ "]+"\??`, pathToken(true), 0},
-	{"PathElement", `\.[^ ;\}\{\:\[\],\|\.\[\(\)=\n]+\??`, pathToken(false), 0},
+	{"PathElement", `\.[^ ;\}\{\:\[\],\|\.\[\(\)=\n!]+\??`, pathToken(false), 0},
 	{"Pipe", `\|`, opToken(pipeOpType), 0},
 	{"Self", `\.`, opToken(selfReferenceOpType), 0},
 
