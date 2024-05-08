@@ -129,15 +129,13 @@ zoo:
 ```
 
 ## Parse xml: force all as an array
-Because of the way yq works, when updating everything you need to update the children before the parents. By default `..` will match parents first, so we reverse that before updating.
-
 Given a sample.xml file of:
 ```xml
 <zoo><thing><frog>boing</frog></thing></zoo>
 ```
 then
 ```bash
-yq -oy '([..] | reverse | .[]) |= [] + .' sample.xml
+yq -oy '.. |= [] + .' sample.xml
 ```
 will output
 ```yaml
@@ -372,7 +370,7 @@ cat: purrs
 ```
 then
 ```bash
-yq -o=xml '.' sample.yml
+yq -o=xml sample.yml
 ```
 will output
 ```xml
@@ -389,7 +387,7 @@ pets:
 ```
 then
 ```bash
-yq -o=xml '.' sample.yml
+yq -o=xml sample.yml
 ```
 will output
 ```xml
@@ -411,7 +409,7 @@ cat:
 ```
 then
 ```bash
-yq -o=xml '.' sample.yml
+yq -o=xml sample.yml
 ```
 will output
 ```xml
@@ -432,7 +430,7 @@ cat:
 ```
 then
 ```bash
-yq -o=xml '.' sample.yml
+yq -o=xml sample.yml
 ```
 will output
 ```xml
@@ -459,7 +457,7 @@ cat: # inline_cat
 ```
 then
 ```bash
-yq -o=xml '.' sample.yml
+yq -o=xml sample.yml
 ```
 will output
 ```xml
@@ -489,7 +487,7 @@ apple:
 ```
 then
 ```bash
-yq -o=xml '.' sample.yml
+yq -o=xml sample.yml
 ```
 will output
 ```xml

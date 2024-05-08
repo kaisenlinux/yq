@@ -31,6 +31,10 @@ func writeString(writer io.Writer, txt string) error {
 	return errorWriting
 }
 
+func ReadDocuments(reader io.Reader, decoder Decoder) (*list.List, error) {
+	return readDocuments(reader, "", 0, decoder)
+}
+
 func readDocuments(reader io.Reader, filename string, fileIndex int, decoder Decoder) (*list.List, error) {
 	err := decoder.Init(reader)
 	if err != nil {
@@ -51,9 +55,9 @@ func readDocuments(reader io.Reader, filename string, fileIndex int, decoder Dec
 		} else if errorReading != nil {
 			return nil, fmt.Errorf("bad file '%v': %w", filename, errorReading)
 		}
-		candidateNode.Document = currentIndex
-		candidateNode.Filename = filename
-		candidateNode.FileIndex = fileIndex
+		candidateNode.document = currentIndex
+		candidateNode.filename = filename
+		candidateNode.fileIndex = fileIndex
 		candidateNode.EvaluateTogether = true
 
 		inputList.PushBack(candidateNode)

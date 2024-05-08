@@ -37,6 +37,39 @@ steps:
 var traversePathOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:     true,
+		description: "access merge anchors",
+		document:    "foo: &foo {x: y}\nbar:\n  <<: *foo\n",
+		expression:  `.bar["<<"] | alias`,
+		expected: []string{
+			"D0, P[bar <<], (!!str)::foo\n",
+		},
+	},
+	{
+		skipDoc:     true,
+		description: "dynamically set parent and key",
+		expression:  `.a.b.c = 3 | .a.b.c`,
+		expected: []string{
+			"D0, P[a b c], (!!int)::3\n",
+		},
+	},
+	{
+		skipDoc:     true,
+		description: "dynamically set parent and key in array",
+		expression:  `.a.b[0] = 3 | .a.b[0]`,
+		expected: []string{
+			"D0, P[a b 0], (!!int)::3\n",
+		},
+	},
+	{
+		skipDoc:     true,
+		description: "dynamically set parent and key",
+		expression:  `.a.b = ["x","y"] | .a.b[1]`,
+		expected: []string{
+			"D0, P[a b 1], (!!str)::y\n",
+		},
+	},
+	{
+		skipDoc:     true,
 		description: "splat empty map",
 		document:    "{}",
 		expression:  ".[]",
@@ -62,7 +95,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   `blah: {}`,
 		expression: `.blah.cat = "cool"`,
 		expected: []string{
-			"D0, P[], (doc)::blah:\n    cat: cool\n",
+			"D0, P[], (!!map)::blah:\n    cat: cool\n",
 		},
 	},
 	{
@@ -70,7 +103,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   `blah: []`,
 		expression: `.blah.0 = "cool"`,
 		expected: []string{
-			"D0, P[], (doc)::blah:\n    - cool\n",
+			"D0, P[], (!!map)::blah:\n    - cool\n",
 		},
 	},
 	{
@@ -160,7 +193,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   `c: dog`,
 		expression: `.[.a.b] as $x | .`,
 		expected: []string{
-			"D0, P[], (doc)::c: dog\n",
+			"D0, P[], (!!map)::c: dog\n",
 		},
 	},
 	{
@@ -278,15 +311,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:    `{a: &cat {c: frog}, b: *cat}`,
 		expression:  `.b[]`,
 		expected: []string{
-			"D0, P[b c], (!!str)::frog\n",
-		},
-	},
-	{
-		skipDoc:    true,
-		document:   `{a: &cat {c: frog}, b: *cat}`,
-		expression: `.b[]`,
-		expected: []string{
-			"D0, P[b c], (!!str)::frog\n",
+			"D0, P[a c], (!!str)::frog\n",
 		},
 	},
 	{
@@ -294,7 +319,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:    `{a: &cat {c: frog}, b: *cat}`,
 		expression:  `.b.c`,
 		expected: []string{
-			"D0, P[b c], (!!str)::frog\n",
+			"D0, P[a c], (!!str)::frog\n",
 		},
 	},
 	{
@@ -343,7 +368,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:    mergeDocSample,
 		expression:  `.foobar.a`,
 		expected: []string{
-			"D0, P[foobar a], (!!str)::foo_a\n",
+			"D0, P[foo a], (!!str)::foo_a\n",
 		},
 	},
 	{
@@ -351,7 +376,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:    mergeDocSample,
 		expression:  `.foobar.c`,
 		expected: []string{
-			"D0, P[foobar c], (!!str)::foo_c\n",
+			"D0, P[foo c], (!!str)::foo_c\n",
 		},
 	},
 	{
@@ -367,18 +392,8 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:    mergeDocSample,
 		expression:  `.foobar[]`,
 		expected: []string{
-			"D0, P[foobar c], (!!str)::foo_c\n",
-			"D0, P[foobar a], (!!str)::foo_a\n",
-			"D0, P[foobar thing], (!!str)::foobar_thing\n",
-		},
-	},
-	{
-		skipDoc:    true,
-		document:   mergeDocSample,
-		expression: `.foobar[]`,
-		expected: []string{
-			"D0, P[foobar c], (!!str)::foo_c\n",
-			"D0, P[foobar a], (!!str)::foo_a\n",
+			"D0, P[foo c], (!!str)::foo_c\n",
+			"D0, P[foo a], (!!str)::foo_a\n",
 			"D0, P[foobar thing], (!!str)::foobar_thing\n",
 		},
 	},
@@ -395,7 +410,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   mergeDocSample,
 		expression: `.foobarList.a`,
 		expected: []string{
-			"D0, P[foobarList a], (!!str)::foo_a\n",
+			"D0, P[foo a], (!!str)::foo_a\n",
 		},
 	},
 	{
@@ -404,7 +419,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:       mergeDocSample,
 		expression:     `.foobarList.thing`,
 		expected: []string{
-			"D0, P[foobarList thing], (!!str)::bar_thing\n",
+			"D0, P[bar thing], (!!str)::bar_thing\n",
 		},
 	},
 	{
@@ -420,7 +435,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   mergeDocSample,
 		expression: `.foobarList.b`,
 		expected: []string{
-			"D0, P[foobarList b], (!!str)::bar_b\n",
+			"D0, P[bar b], (!!str)::bar_b\n",
 		},
 	},
 	{
@@ -428,20 +443,9 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:    mergeDocSample,
 		expression:  `.foobarList[]`,
 		expected: []string{
-			"D0, P[foobarList b], (!!str)::bar_b\n",
-			"D0, P[foobarList a], (!!str)::foo_a\n",
-			"D0, P[foobarList thing], (!!str)::bar_thing\n",
-			"D0, P[foobarList c], (!!str)::foobarList_c\n",
-		},
-	},
-	{
-		skipDoc:    true,
-		document:   mergeDocSample,
-		expression: `.foobarList[]`,
-		expected: []string{
-			"D0, P[foobarList b], (!!str)::bar_b\n",
-			"D0, P[foobarList a], (!!str)::foo_a\n",
-			"D0, P[foobarList thing], (!!str)::bar_thing\n",
+			"D0, P[bar b], (!!str)::bar_b\n",
+			"D0, P[foo a], (!!str)::foo_a\n",
+			"D0, P[bar thing], (!!str)::bar_thing\n",
 			"D0, P[foobarList c], (!!str)::foobarList_c\n",
 		},
 	},
@@ -494,15 +498,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   `{a: [a,b,c]}`,
 		expression: `.a[-1]`,
 		expected: []string{
-			"D0, P[a -1], (!!str)::c\n",
-		},
-	},
-	{
-		skipDoc:    true,
-		document:   `{a: [a,b,c]}`,
-		expression: `.a[-1]`,
-		expected: []string{
-			"D0, P[a -1], (!!str)::c\n",
+			"D0, P[a 2], (!!str)::c\n",
 		},
 	},
 	{
@@ -510,15 +506,7 @@ var traversePathOperatorScenarios = []expressionScenario{
 		document:   `{a: [a,b,c]}`,
 		expression: `.a[-2]`,
 		expected: []string{
-			"D0, P[a -2], (!!str)::b\n",
-		},
-	},
-	{
-		skipDoc:    true,
-		document:   `{a: [a,b,c]}`,
-		expression: `.a[-2]`,
-		expected: []string{
-			"D0, P[a -2], (!!str)::b\n",
+			"D0, P[a 1], (!!str)::b\n",
 		},
 	},
 	{

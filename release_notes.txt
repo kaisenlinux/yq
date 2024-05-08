@@ -1,3 +1,68 @@
+4.43.1: (not released yet)
+  - Added omit operator #1989 thanks @mbenson!
+  - Added tostring #72
+  - Added string interpolation #1149
+  - Can specify parent(n) levels #1970
+  - Can now multiply strings by numbers #1988  thanks @mbenson!
+  - Fixed CSV line break issue #1974
+  - Adding a EvaluateAll function to StringEvaluator #1966
+  - yqlib, default to colors off when using yaml library #1964
+  - Bumped dependencies
+
+
+4.42.1:
+  - Can execute yq expression files directly with shebang #1851
+  - Added --csv-separator flag #1950
+  - Added --properties-separator option - thanks  @learnitall #1864
+  - Added --properties-array-brackets flag for properties encoder #1933
+  - Shell completion improvements - thanks @scop #1911
+  - Bumped dependencies
+
+
+4.41.1:
+  - Can now comment in yq expressions! #1919
+  - Fixed Toml decoding when table array defined before parent #1922
+  - Added new CSV option to turn off auto-parsing #1947
+  - Fixing with_entries context #1925
+  - Can now retrieve the alias names of merge anchors #1942
+
+
+4.40.7:
+  - Bumped dependencies
+
+4.40.6:
+  - Fix: empty TOML table #1924 - Thanks @elibroftw 
+  - Fixed "all" error message #1845
+  - Fixed to_entries[]
+  - Bumped dependencies
+
+4.40.5:
+  - Fixing seg fault on bad XML #1888
+  - Fixed handling of --- #1890, #1896
+  - Bumped dependencies
+
+4.40.4:
+  - Fixed bug with creating maps with values based off keys #1886, #1889
+  - Bumped dependencies
+
+4.40.3: 
+  - Fixed JSON output issue with empty arrays #1880
+
+4.40.2:
+  - Do not panic when StdIn is closed (#1867) Thanks @aleskandro!
+  - Fixed issue when update against self #1869
+  - Fixed multi doc anchor bug #1861
+  - Fixes doc line separator issue when reading expression file #1860
+  - Bumped dependencies
+
+4.40.1:
+  - Added tonumber support (#1664, #71)
+  - Added kind operator
+  - Lua output fixes (#1811) - Thanks @Zash!
+  - Add support for Lua input (#1810) - Thanks @Zash!
+  - Rewrote parsing engine - yq now has its own AST!
+  - Bumped dependencies
+
 4.35.2:
   - Fix various typos #1798
   - Fixed number parsing as float bug in JSON #1756
@@ -260,7 +325,7 @@
   - Fixed bug - handle expressions that match a directory (e.g. ".")
 
 4.19.1:
-  - New [eval](https://mikefarah.gitbook.io/yq/operators/eval) _operator_ that allows dynamic expression evaluation (e.g. from a env variable) (#1087)
+  - New [eval](https://mikefarah.gitbook.io/yq/operators/eval) _operator_ that allows dynamic expression evaluation (e.g. from an env variable) (#1087)
   - Adding new elements to array now automatically applies styling of existing elements (#722)
 
 4.18.1:

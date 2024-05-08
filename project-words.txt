@@ -126,6 +126,7 @@ Lexer
 libdistro
 lindex
 linecomment
+LVAs
 magiconair
 mapvalues
 Mier
@@ -135,6 +136,7 @@ minishift
 mipsle
 mitchellh
 mktemp
+Mult
 multidoc
 multimaint
 myenv
@@ -153,6 +155,7 @@ Nonquoting
 nosec
 notoml
 noxml
+nolua
 nullinput
 onea
 Oneshot
@@ -244,4 +247,9 @@ xmld
 xyzzy
 yamld
 yqlib
+yuin
 zabbix
+tonumber
+noyaml
+nolint
+shortfile

@@ -3,8 +3,6 @@ package yqlib
 import (
 	"fmt"
 	"io"
-
-	yaml "gopkg.in/yaml.v3"
 )
 
 type tomlEncoder struct {
@@ -14,18 +12,18 @@ func NewTomlEncoder() Encoder {
 	return &tomlEncoder{}
 }
 
-func (te *tomlEncoder) Encode(writer io.Writer, node *yaml.Node) error {
-	if node.Kind == yaml.ScalarNode {
+func (te *tomlEncoder) Encode(writer io.Writer, node *CandidateNode) error {
+	if node.Kind == ScalarNode {
 		return writeString(writer, node.Value+"\n")
 	}
 	return fmt.Errorf("only scalars (e.g. strings, numbers, booleans) are supported for TOML output at the moment. Please use yaml output format (-oy) until the encoder has been fully implemented")
 }
 
-func (te *tomlEncoder) PrintDocumentSeparator(writer io.Writer) error {
+func (te *tomlEncoder) PrintDocumentSeparator(_ io.Writer) error {
 	return nil
 }
 
-func (te *tomlEncoder) PrintLeadingContent(writer io.Writer, content string) error {
+func (te *tomlEncoder) PrintLeadingContent(_ io.Writer, _ string) error {
 	return nil
 }
 
