@@ -73,6 +73,8 @@ var equalsOpType = &operationType{Type: "EQUALS", NumArgs: 2, Precedence: 40, Ha
 var notEqualsOpType = &operationType{Type: "NOT_EQUALS", NumArgs: 2, Precedence: 40, Handler: notEqualsOperator}
 
 var compareOpType = &operationType{Type: "COMPARE", NumArgs: 2, Precedence: 40, Handler: compareOperator}
+var minOpType = &operationType{Type: "MIN", NumArgs: 0, Precedence: 40, Handler: minOperator}
+var maxOpType = &operationType{Type: "MAX", NumArgs: 0, Precedence: 40, Handler: maxOperator}
 
 // createmap needs to be above union, as we use union to build the components of the objects
 var createMapOpType = &operationType{Type: "CREATE_MAP", NumArgs: 2, Precedence: 15, Handler: createMapOperator}
@@ -83,16 +85,17 @@ var lengthOpType = &operationType{Type: "LENGTH", NumArgs: 0, Precedence: 50, Ha
 var lineOpType = &operationType{Type: "LINE", NumArgs: 0, Precedence: 50, Handler: lineOperator}
 var columnOpType = &operationType{Type: "LINE", NumArgs: 0, Precedence: 50, Handler: columnOperator}
 
+// Use this expression to create alias/syntactic sugar expressions (in lexer_participle).
 var expressionOpType = &operationType{Type: "EXP", NumArgs: 0, Precedence: 50, Handler: expressionOperator}
 
 var collectOpType = &operationType{Type: "COLLECT", NumArgs: 1, Precedence: 50, Handler: collectOperator}
-var mapOpType = &operationType{Type: "MAP", NumArgs: 1, Precedence: 50, Handler: mapOperator}
-var filterOpType = &operationType{Type: "FILTER", NumArgs: 1, Precedence: 50, Handler: filterOperator}
+var mapOpType = &operationType{Type: "MAP", NumArgs: 1, Precedence: 52, Handler: mapOperator, CheckForPostTraverse: true}
+var filterOpType = &operationType{Type: "FILTER", NumArgs: 1, Precedence: 52, Handler: filterOperator, CheckForPostTraverse: true}
 var errorOpType = &operationType{Type: "ERROR", NumArgs: 1, Precedence: 50, Handler: errorOperator}
-var pickOpType = &operationType{Type: "PICK", NumArgs: 1, Precedence: 50, Handler: pickOperator}
-var omitOpType = &operationType{Type: "OMIT", NumArgs: 1, Precedence: 50, Handler: omitOperator}
-var evalOpType = &operationType{Type: "EVAL", NumArgs: 1, Precedence: 50, Handler: evalOperator}
-var mapValuesOpType = &operationType{Type: "MAP_VALUES", NumArgs: 1, Precedence: 50, Handler: mapValuesOperator}
+var pickOpType = &operationType{Type: "PICK", NumArgs: 1, Precedence: 52, Handler: pickOperator, CheckForPostTraverse: true}
+var omitOpType = &operationType{Type: "OMIT", NumArgs: 1, Precedence: 52, Handler: omitOperator, CheckForPostTraverse: true}
+var evalOpType = &operationType{Type: "EVAL", NumArgs: 1, Precedence: 52, Handler: evalOperator, CheckForPostTraverse: true}
+var mapValuesOpType = &operationType{Type: "MAP_VALUES", NumArgs: 1, Precedence: 52, Handler: mapValuesOperator, CheckForPostTraverse: true}
 
 var formatDateTimeOpType = &operationType{Type: "FORMAT_DATE_TIME", NumArgs: 1, Precedence: 50, Handler: formatDateTime}
 var withDtFormatOpType = &operationType{Type: "WITH_DATE_TIME_FORMAT", NumArgs: 1, Precedence: 50, Handler: withDateTimeFormat}
@@ -114,9 +117,9 @@ var toEntriesOpType = &operationType{Type: "TO_ENTRIES", NumArgs: 0, Precedence:
 var fromEntriesOpType = &operationType{Type: "FROM_ENTRIES", NumArgs: 0, Precedence: 50, Handler: fromEntriesOperator}
 var withEntriesOpType = &operationType{Type: "WITH_ENTRIES", NumArgs: 1, Precedence: 50, Handler: withEntriesOperator}
 
-var withOpType = &operationType{Type: "WITH", NumArgs: 1, Precedence: 50, Handler: withOperator}
+var withOpType = &operationType{Type: "WITH", NumArgs: 1, Precedence: 52, Handler: withOperator, CheckForPostTraverse: true}
 
-var splitDocumentOpType = &operationType{Type: "SPLIT_DOC", NumArgs: 0, Precedence: 50, Handler: splitDocumentOperator}
+var splitDocumentOpType = &operationType{Type: "SPLIT_DOC", NumArgs: 0, Precedence: 52, Handler: splitDocumentOperator, CheckForPostTraverse: true}
 var getVariableOpType = &operationType{Type: "GET_VARIABLE", NumArgs: 0, Precedence: 55, Handler: getVariableOperator}
 var getStyleOpType = &operationType{Type: "GET_STYLE", NumArgs: 0, Precedence: 50, Handler: getStyleOperator}
 var getTagOpType = &operationType{Type: "GET_TAG", NumArgs: 0, Precedence: 50, Handler: getTagOperator}
@@ -133,33 +136,33 @@ var getDocumentIndexOpType = &operationType{Type: "GET_DOCUMENT_INDEX", NumArgs:
 var getFilenameOpType = &operationType{Type: "GET_FILENAME", NumArgs: 0, Precedence: 50, Handler: getFilenameOperator}
 var getFileIndexOpType = &operationType{Type: "GET_FILE_INDEX", NumArgs: 0, Precedence: 50, Handler: getFileIndexOperator}
 
-var getPathOpType = &operationType{Type: "GET_PATH", NumArgs: 0, Precedence: 50, Handler: getPathOperator}
+var getPathOpType = &operationType{Type: "GET_PATH", NumArgs: 0, Precedence: 52, Handler: getPathOperator, CheckForPostTraverse: true}
 var setPathOpType = &operationType{Type: "SET_PATH", NumArgs: 1, Precedence: 50, Handler: setPathOperator}
-var delPathsOpType = &operationType{Type: "DEL_PATHS", NumArgs: 1, Precedence: 50, Handler: delPathsOperator}
+var delPathsOpType = &operationType{Type: "DEL_PATHS", NumArgs: 1, Precedence: 52, Handler: delPathsOperator, CheckForPostTraverse: true}
 
-var explodeOpType = &operationType{Type: "EXPLODE", NumArgs: 1, Precedence: 50, Handler: explodeOperator}
-var sortByOpType = &operationType{Type: "SORT_BY", NumArgs: 1, Precedence: 50, Handler: sortByOperator}
-var reverseOpType = &operationType{Type: "REVERSE", NumArgs: 0, Precedence: 50, Handler: reverseOperator}
-var sortOpType = &operationType{Type: "SORT", NumArgs: 0, Precedence: 50, Handler: sortOperator}
-var shuffleOpType = &operationType{Type: "SHUFFLE", NumArgs: 0, Precedence: 50, Handler: shuffleOperator}
+var explodeOpType = &operationType{Type: "EXPLODE", NumArgs: 1, Precedence: 52, Handler: explodeOperator, CheckForPostTraverse: true}
+var sortByOpType = &operationType{Type: "SORT_BY", NumArgs: 1, Precedence: 52, Handler: sortByOperator, CheckForPostTraverse: true}
+var reverseOpType = &operationType{Type: "REVERSE", NumArgs: 0, Precedence: 52, Handler: reverseOperator, CheckForPostTraverse: true}
+var sortOpType = &operationType{Type: "SORT", NumArgs: 0, Precedence: 52, Handler: sortOperator, CheckForPostTraverse: true}
+var shuffleOpType = &operationType{Type: "SHUFFLE", NumArgs: 0, Precedence: 52, Handler: shuffleOperator, CheckForPostTraverse: true}
 
-var sortKeysOpType = &operationType{Type: "SORT_KEYS", NumArgs: 1, Precedence: 50, Handler: sortKeysOperator}
+var sortKeysOpType = &operationType{Type: "SORT_KEYS", NumArgs: 1, Precedence: 52, Handler: sortKeysOperator, CheckForPostTraverse: true}
 
 var joinStringOpType = &operationType{Type: "JOIN", NumArgs: 1, Precedence: 50, Handler: joinStringOperator}
 var subStringOpType = &operationType{Type: "SUBSTR", NumArgs: 1, Precedence: 50, Handler: substituteStringOperator}
 var matchOpType = &operationType{Type: "MATCH", NumArgs: 1, Precedence: 50, Handler: matchOperator}
 var captureOpType = &operationType{Type: "CAPTURE", NumArgs: 1, Precedence: 50, Handler: captureOperator}
 var testOpType = &operationType{Type: "TEST", NumArgs: 1, Precedence: 50, Handler: testOperator}
-var splitStringOpType = &operationType{Type: "SPLIT", NumArgs: 1, Precedence: 50, Handler: splitStringOperator}
+var splitStringOpType = &operationType{Type: "SPLIT", NumArgs: 1, Precedence: 52, Handler: splitStringOperator, CheckForPostTraverse: true}
 var changeCaseOpType = &operationType{Type: "CHANGE_CASE", NumArgs: 0, Precedence: 50, Handler: changeCaseOperator}
 var trimOpType = &operationType{Type: "TRIM", NumArgs: 0, Precedence: 50, Handler: trimSpaceOperator}
 var toStringOpType = &operationType{Type: "TO_STRING", NumArgs: 0, Precedence: 50, Handler: toStringOperator}
 var stringInterpolationOpType = &operationType{Type: "STRING_INT", NumArgs: 0, Precedence: 50, Handler: stringInterpolationOperator, ToString: valueToStringFunc}
 
-var loadOpType = &operationType{Type: "LOAD", NumArgs: 1, Precedence: 52, Handler: loadOperator}
+var loadOpType = &operationType{Type: "LOAD", NumArgs: 1, Precedence: 52, Handler: loadOperator, CheckForPostTraverse: true}
 var loadStringOpType = &operationType{Type: "LOAD_STRING", NumArgs: 1, Precedence: 52, Handler: loadStringOperator}
 
-var keysOpType = &operationType{Type: "KEYS", NumArgs: 0, Precedence: 50, Handler: keysOperator}
+var keysOpType = &operationType{Type: "KEYS", NumArgs: 0, Precedence: 52, Handler: keysOperator, CheckForPostTraverse: true}
 
 var collectObjectOpType = &operationType{Type: "COLLECT_OBJECT", NumArgs: 0, Precedence: 50, Handler: collectObjectOperator}
 
@@ -173,7 +176,7 @@ var traverseArrayOpType = &operationType{Type: "TRAVERSE_ARRAY", NumArgs: 2, Pre
 var selfReferenceOpType = &operationType{Type: "SELF", NumArgs: 0, Precedence: 55, Handler: selfOperator}
 var valueOpType = &operationType{Type: "VALUE", NumArgs: 0, Precedence: 50, Handler: valueOperator, ToString: valueToStringFunc}
 var referenceOpType = &operationType{Type: "REF", NumArgs: 0, Precedence: 50, Handler: referenceOperator}
-var envOpType = &operationType{Type: "ENV", NumArgs: 0, Precedence: 50, Handler: envOperator}
+var envOpType = &operationType{Type: "ENV", NumArgs: 0, Precedence: 52, Handler: envOperator, CheckForPostTraverse: true}
 var notOpType = &operationType{Type: "NOT", NumArgs: 0, Precedence: 50, Handler: notOperator}
 var toNumberOpType = &operationType{Type: "TO_NUMBER", NumArgs: 0, Precedence: 50, Handler: toNumberOperator}
 var emptyOpType = &operationType{Type: "EMPTY", Precedence: 50, Handler: emptyOperator}
@@ -182,13 +185,15 @@ var envsubstOpType = &operationType{Type: "ENVSUBST", NumArgs: 0, Precedence: 50
 
 var recursiveDescentOpType = &operationType{Type: "RECURSIVE_DESCENT", NumArgs: 0, Precedence: 50, Handler: recursiveDescentOperator}
 
-var selectOpType = &operationType{Type: "SELECT", NumArgs: 1, Precedence: 50, Handler: selectOperator}
+var selectOpType = &operationType{Type: "SELECT", NumArgs: 1, Precedence: 52, Handler: selectOperator, CheckForPostTraverse: true}
 var hasOpType = &operationType{Type: "HAS", NumArgs: 1, Precedence: 50, Handler: hasOperator}
-var uniqueOpType = &operationType{Type: "UNIQUE", NumArgs: 0, Precedence: 50, Handler: unique}
-var uniqueByOpType = &operationType{Type: "UNIQUE_BY", NumArgs: 1, Precedence: 50, Handler: uniqueBy}
-var groupByOpType = &operationType{Type: "GROUP_BY", NumArgs: 1, Precedence: 50, Handler: groupBy}
-var flattenOpType = &operationType{Type: "FLATTEN_BY", NumArgs: 0, Precedence: 50, Handler: flattenOp}
+var uniqueOpType = &operationType{Type: "UNIQUE", NumArgs: 0, Precedence: 52, Handler: unique, CheckForPostTraverse: true}
+var uniqueByOpType = &operationType{Type: "UNIQUE_BY", NumArgs: 1, Precedence: 52, Handler: uniqueBy, CheckForPostTraverse: true}
+var groupByOpType = &operationType{Type: "GROUP_BY", NumArgs: 1, Precedence: 52, Handler: groupBy, CheckForPostTraverse: true}
+var flattenOpType = &operationType{Type: "FLATTEN_BY", NumArgs: 0, Precedence: 52, Handler: flattenOp, CheckForPostTraverse: true}
 var deleteChildOpType = &operationType{Type: "DELETE", NumArgs: 1, Precedence: 40, Handler: deleteChildOperator}
+
+var pivotOpType = &operationType{Type: "PIVOT", NumArgs: 0, Precedence: 52, Handler: pivotOperator, CheckForPostTraverse: true}
 
 // debugging purposes only
 func (p *Operation) toString() string {

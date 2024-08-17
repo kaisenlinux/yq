@@ -199,6 +199,9 @@ var participleYqRules = []*participleYqRule{
 	{"GreaterThan", `\s*>\s*`, opTokenWithPrefs(compareOpType, nil, compareTypePref{OrEqual: false, Greater: true}), 0},
 	{"LessThan", `\s*<\s*`, opTokenWithPrefs(compareOpType, nil, compareTypePref{OrEqual: false, Greater: false}), 0},
 
+	simpleOp("min", minOpType),
+	simpleOp("max", maxOpType),
+
 	{"AssignRelative", `\|=[c]*`, assignOpToken(true), 0},
 	{"Assign", `=[c]*`, assignOpToken(false), 0},
 
@@ -224,6 +227,8 @@ var participleYqRules = []*participleYqRule{
 	{"SubtractAssign", `\-=`, opToken(subtractAssignOpType), 0},
 	{"Subtract", `\-`, opToken(subtractOpType), 0},
 	{"Comment", `#.*`, nil, 0},
+
+	simpleOp("pivot", pivotOpType),
 }
 
 type yqAction func(lexer.Token) (*token, error)
@@ -323,7 +328,7 @@ func flattenWithDepth() yqAction {
 
 		prefs := flattenPreferences{depth: depth}
 		op := &Operation{OperationType: flattenOpType, Value: flattenOpType.Type, StringValue: value, Preferences: prefs}
-		return &token{TokenType: operationToken, Operation: op}, nil
+		return &token{TokenType: operationToken, Operation: op, CheckForPostTraverse: flattenOpType.CheckForPostTraverse}, nil
 	}
 }
 
@@ -401,7 +406,7 @@ func envOp(strenv bool) yqAction {
 		envOperation.OperationType = envOpType
 		envOperation.Preferences = preferences
 
-		return &token{TokenType: operationToken, Operation: envOperation}, nil
+		return &token{TokenType: operationToken, Operation: envOperation, CheckForPostTraverse: envOpType.CheckForPostTraverse}, nil
 	}
 }
 

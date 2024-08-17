@@ -95,10 +95,20 @@ func parseSnippet(value string) (*CandidateNode, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if result.Kind == ScalarNode {
+		result.LineComment = result.LeadingContent
+	} else {
+		result.HeadComment = result.LeadingContent
+	}
+	result.LeadingContent = ""
+
 	if result.Tag == "!!str" {
 		// use the original string value, as
 		// decoding drops new lines
-		return createScalarNode(value, value), nil
+		newNode := createScalarNode(value, value)
+		newNode.LineComment = result.LineComment
+		return newNode, nil
 	}
 	result.Line = 0
 	result.Column = 0
@@ -135,8 +145,12 @@ func recursiveNodeEqual(lhs *CandidateNode, rhs *CandidateNode) bool {
 	return false
 }
 
-// yaml numbers can be hex and octal encoded...
+// yaml numbers can have underscores, be hex and octal encoded...
 func parseInt64(numberString string) (string, int64, error) {
+	if strings.Contains(numberString, "_") {
+		numberString = strings.ReplaceAll(numberString, "_", "")
+	}
+
 	if strings.HasPrefix(numberString, "0x") ||
 		strings.HasPrefix(numberString, "0X") {
 		num, err := strconv.ParseInt(numberString[2:], 16, 64)

@@ -1,3 +1,12 @@
+yq (4.44.3-1kaisen) kaisen-packages; urgency=medium
+
+  * Import the 4.44.3 release
+  * Bump the Standards-Version
+  * Bump the golang-go version required to build
+  * Drop the i386 arch
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sat, 17 Aug 2024 03:33:08 +0200
+
 yq (4.43.1-1kaisen) kaisen-packages; urgency=medium
 
   * Import the 4.43.1 release

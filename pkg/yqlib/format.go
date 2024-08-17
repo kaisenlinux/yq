@@ -2,6 +2,7 @@ package yqlib
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 )
 
@@ -107,12 +108,11 @@ func (f *Format) GetConfiguredEncoder() Encoder {
 }
 
 func FormatStringFromFilename(filename string) string {
-
 	if filename != "" {
-		GetLogger().Debugf("checking file extension '%s' for auto format detection", filename)
-		nPos := strings.LastIndex(filename, ".")
-		if nPos > -1 {
-			format := filename[nPos+1:]
+		GetLogger().Debugf("checking filename '%s' for auto format detection", filename)
+		ext := filepath.Ext(filename)
+		if ext != "" && ext[0] == '.' {
+			format := strings.ToLower(ext[1:])
 			GetLogger().Debugf("detected format '%s'", format)
 			return format
 		}
@@ -123,9 +123,11 @@ func FormatStringFromFilename(filename string) string {
 }
 
 func FormatFromString(format string) (*Format, error) {
-	for _, printerFormat := range Formats {
-		if printerFormat.MatchesName(format) {
-			return printerFormat, nil
+	if format != "" {
+		for _, printerFormat := range Formats {
+			if printerFormat.MatchesName(format) {
+				return printerFormat, nil
+			}
 		}
 	}
 	return nil, fmt.Errorf("unknown format '%v' please use [%v]", format, GetAvailableOutputFormatString())
