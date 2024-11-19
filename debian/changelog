@@ -1,3 +1,10 @@
+yq (4.44.5-1kaisen) kaisen-packages; urgency=medium
+
+  * Import the 4.44.5 release
+  * Bump the golang-go version required to build
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Tue, 19 Aug 2024 17:11:07 +0200
+
 yq (4.44.3-1kaisen) kaisen-packages; urgency=medium
 
   * Import the 4.44.3 release
