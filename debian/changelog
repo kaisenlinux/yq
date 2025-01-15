@@ -1,3 +1,9 @@
+yq (4.45.1-1kaisen) kaisen-packages; urgency=medium
+
+  * Import the 4.45.1 release
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 15 Jan 2025 16:38:22 +0200
+
 yq (4.44.5-1kaisen) kaisen-packages; urgency=medium
 
   * Import the 4.44.5 release

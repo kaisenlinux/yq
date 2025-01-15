@@ -1,3 +1,17 @@
+4.45.1:
+  - Create parent directories when --split-exp is used, Thanks @rudo-thomas
+  - Bumped dependencies 
+
+4.44.6:
+  - Fixed deleting items in array bug #2027, #2172; Thanks @jandubois 
+  - Docker image for armv7 / raspberry pi3, Thanks @brianegge
+  - Fixed no-colors regression #2218
+  - Fixed various panic scenarios #2211
+  - Bumped dependencies 
+
+4.44.5:
+  - Fixing release pipeline
+
 4.44.4:
 - Format comments with a gray foreground (Thanks @gabe565)
 - Fixed handling of nulls with sort_by expressions #2164
