@@ -7,6 +7,107 @@ import (
 var addOperatorScenarios = []expressionScenario{
 	{
 		skipDoc:    true,
+		expression: `"foo" + "bar"`,
+		expected: []string{
+			"D0, P[], (!!str)::foobar\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		expression: `[] | .[] | "foo" + .`,
+		expected:   []string{},
+	},
+	{
+		skipDoc:    true,
+		expression: `[] | .[] | . + "foo"`,
+		expected:   []string{},
+	},
+	{
+		skipDoc:    true,
+		expression: `select(.) | "foo" + "bar"`,
+		expected: []string{
+			"D0, P[], (!!str)::foobar\n", // jq does not do this :/ - but yq has for quite some time.
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   "apples: 3",
+		expression: `.apples + 3`,
+		expected: []string{
+			"D0, P[apples], (!!int)::6\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   "apples: 3",
+		expression: `.bobo + 3`,
+		expected: []string{
+			"D0, P[], (!!int)::3\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		expression: `select(.) | "cat" + .`,
+		expected:   []string{},
+	},
+	{
+		skipDoc:    true,
+		document:   `[]`,
+		expression: `.[] | (.a + "|" + .b)`,
+		expected:   []string{},
+	},
+	{
+		skipDoc:    true,
+		document:   `[]`,
+		expression: `.[] | (.a + "|")`,
+		expected:   []string{},
+	},
+	{
+		skipDoc:    true,
+		document:   `[]`,
+		expression: `.[] | ("|" + .a)`,
+		expected:   []string{},
+	},
+	{
+		skipDoc:    true,
+		document:   `resources: [foo, bar, baz]`,
+		expression: `.missing + .resources | .[]`,
+		expected: []string{
+			"D0, P[resources 0], (!!str)::foo\n",
+			"D0, P[resources 1], (!!str)::bar\n",
+			"D0, P[resources 2], (!!str)::baz\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   `resources: [foo, bar, baz]`,
+		expression: `. | .missing + .resources | .[]`,
+		expected: []string{
+			"D0, P[resources 0], (!!str)::foo\n",
+			"D0, P[resources 1], (!!str)::bar\n",
+			"D0, P[resources 2], (!!str)::baz\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   `resources: [foo, bar, baz]`,
+		expression: `. | .missing + .resources`,
+		expected: []string{
+			"D0, P[resources], (!!seq)::[foo, bar, baz]\n",
+		},
+	},
+	{
+		skipDoc:    true,
+		document:   `resources: [foo, bar, baz]`,
+		expression: `. | .missing + .resources | .[]`,
+		expected: []string{
+			"D0, P[resources 0], (!!str)::foo\n",
+			"D0, P[resources 1], (!!str)::bar\n",
+			"D0, P[resources 2], (!!str)::baz\n",
+		},
+	},
+	{
+		skipDoc:    true,
 		document:   `[{a: foo, b: bar}, {a: 1, b: 2}]`,
 		expression: ".[] | .a + .b",
 		expected: []string{
@@ -308,6 +409,29 @@ var addOperatorScenarios = []expressionScenario{
 		expression:     `with_dtf("Monday, 02-Jan-06 at 3:04PM MST", .a += "3h1m")`,
 		expected: []string{
 			"D0, P[], (!!map)::a: !cat Saturday, 15-Dec-01 at 6:00AM GMT\n",
+		},
+	},
+	{
+		skipDoc:     true,
+		description: "empty add shouldn't add",
+		document:    `[]`,
+		expression:  `.[]  | (.a + "cat")`,
+		expected:    []string{},
+	},
+	{
+		skipDoc:     true,
+		description: "empty add shouldn't add",
+		document:    `[]`,
+		expression:  `.[]  | (.a + "cat" + .b)`,
+		expected:    []string{},
+	},
+	{
+		skipDoc:        true,
+		description:    "Add to empty",
+		subdescription: "should behave like null",
+		expression:     `.nada + "cat"`,
+		expected: []string{
+			"D0, P[], (!!str)::cat\n",
 		},
 	},
 	{
